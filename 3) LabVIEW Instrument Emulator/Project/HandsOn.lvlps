@@ -1,10 +1,8 @@
 [ProjectWindow_Data]
-ProjectExplorer.ClassicPosition[String] = "91,206,655,594"
+ProjectExplorer.ClassicPosition[String] = "102,484,666,872"
 
 [AB_Cache_{CCB3C714-A0C4-4EF3-9FEE-235CA2BEC72E}]
-Cache_Path[Path] Line0001 = "/C/Users/swatzy/AppData/Local/Temp/AB_Cache_{CCB3C"
-Cache_Path[Path] Line0002 = "714-A0C4-4EF3-9FEE-235CA2BEC72E}.txt"
+Cache_Path[Path] = "/tmp/AB_Cache_{CCB3C714-A0C4-4EF3-9FEE-235CA2BEC72E}.txt"
 
 [AB_Cache_{D73502B8-B206-4E45-9147-4E6CC75FB7ED}]
-Cache_Path[Path] Line0001 = "/C/Users/swatzy/AppData/Local/Temp/AB_Cache_{D7350"
-Cache_Path[Path] Line0002 = "2B8-B206-4E45-9147-4E6CC75FB7ED}.txt"
+Cache_Path[Path] = "/tmp/AB_Cache_{D73502B8-B206-4E45-9147-4E6CC75FB7ED}.txt"
