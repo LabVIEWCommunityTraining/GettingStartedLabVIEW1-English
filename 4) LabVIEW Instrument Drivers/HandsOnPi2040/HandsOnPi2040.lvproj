@@ -52,9 +52,6 @@
 				<Item Name="High Resolution Relative Seconds.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/High Resolution Relative Seconds.vi"/>
 				<Item Name="NI_PtbyPt.lvlib" Type="Library" URL="/&lt;vilib&gt;/ptbypt/NI_PtbyPt.lvlib"/>
 			</Item>
-			<Item Name="instr.lib" Type="Folder">
-				<Item Name="Default Instrument Setup.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Private/Default Instrument Setup.vi"/>
-			</Item>
 		</Item>
 		<Item Name="Build Specifications" Type="Build"/>
 	</Item>
