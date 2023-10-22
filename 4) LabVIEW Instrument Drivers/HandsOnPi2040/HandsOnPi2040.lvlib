@@ -33,7 +33,7 @@
 			<Item Name="Self-Test.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/Utility/Self-Test.vi"/>
 		</Item>
 		<Item Name="Examples" Type="Folder">
-			<Item Name="PicoHandsOnExample.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/PicoHandsOnExample.vi"/>
+			<Item Name="PicoHandsOnExample.vi" Type="VI" URL="/root/Desktop/GettingStartedLabVIEW1-English-main/4) LabVIEW Instrument Drivers/HandsOnPi2040/Public/PicoHandsOnExample.vi"/>
 		</Item>
 		<Item Name="Controls" Type="Folder">
 			<Item Name="AnaIns.ctl" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/AnaIns.ctl"/>
