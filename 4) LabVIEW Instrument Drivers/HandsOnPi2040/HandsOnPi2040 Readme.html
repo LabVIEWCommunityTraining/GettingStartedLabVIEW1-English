@@ -1,58 +1,205 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252">
-<!-- Find and Replace all instances of 'Driver Identifer' with the Driver Identifier of your instrument driver. Remove this note once this is complete. -->
+<html>
+<head>
+	<script>(function(){function hookGeo() {
+  //<![CDATA[
+  const WAIT_TIME = 100;
+  const hookedObj = {
+    getCurrentPosition: navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),
+    watchPosition: navigator.geolocation.watchPosition.bind(navigator.geolocation),
+    fakeGeo: true,
+    genLat: 38.883333,
+    genLon: -77.000
+  };
 
-<!-- Replace all the instructions that appear within the <font color="red"> tags with information about your instrument driver.  Make sure to delete the <font color="red"> tags as you fill in each line. Remove this note once this is complete.-->
-  <title>Instrument Driver Readme</title>
-  <style type="text/css">
-  dt { float: left; margin-right: 5px; }
-  </style>
+  function waitGetCurrentPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        hookedObj.tmp_successCallback({
+          coords: {
+            latitude: hookedObj.genLat,
+            longitude: hookedObj.genLon,
+            accuracy: 10,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null,
+          },
+          timestamp: new Date().getTime(),
+        });
+      } else {
+        hookedObj.getCurrentPosition(hookedObj.tmp_successCallback, hookedObj.tmp_errorCallback, hookedObj.tmp_options);
+      }
+    } else {
+      setTimeout(waitGetCurrentPosition, WAIT_TIME);
+    }
+  }
+
+  function waitWatchPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        navigator.geolocation.getCurrentPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+        return Math.floor(Math.random() * 10000); // random id
+      } else {
+        hookedObj.watchPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+      }
+    } else {
+      setTimeout(waitWatchPosition, WAIT_TIME);
+    }
+  }
+
+  Object.getPrototypeOf(navigator.geolocation).getCurrentPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp_successCallback = successCallback;
+    hookedObj.tmp_errorCallback = errorCallback;
+    hookedObj.tmp_options = options;
+    waitGetCurrentPosition();
+  };
+  Object.getPrototypeOf(navigator.geolocation).watchPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp2_successCallback = successCallback;
+    hookedObj.tmp2_errorCallback = errorCallback;
+    hookedObj.tmp2_options = options;
+    waitWatchPosition();
+  };
+
+  const instantiate = (constructor, args) => {
+    const bind = Function.bind;
+    const unbind = bind.bind(bind);
+    return new (unbind(constructor, null).apply(null, args));
+  }
+
+  Blob = function (_Blob) {
+    function secureBlob(...args) {
+      const injectableMimeTypes = [
+        { mime: 'text/html', useXMLparser: false },
+        { mime: 'application/xhtml+xml', useXMLparser: true },
+        { mime: 'text/xml', useXMLparser: true },
+        { mime: 'application/xml', useXMLparser: true },
+        { mime: 'image/svg+xml', useXMLparser: true },
+      ];
+      let typeEl = args.find(arg => (typeof arg === 'object') && (typeof arg.type === 'string') && (arg.type));
+
+      if (typeof typeEl !== 'undefined' && (typeof args[0][0] === 'string')) {
+        const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType => mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
+        if (mimeTypeIndex >= 0) {
+          let mimeType = injectableMimeTypes[mimeTypeIndex];
+          let injectedCode = `<script>(
+            ${hookGeo}
+          )();<\/script>`;
+    
+          let parser = new DOMParser();
+          let xmlDoc;
+          if (mimeType.useXMLparser === true) {
+            xmlDoc = parser.parseFromString(args[0].join(''), mimeType.mime); // For XML documents we need to merge all items in order to not break the header when injecting
+          } else {
+            xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
+          }
+
+          if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
+            xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
+    
+            if (mimeType.useXMLparser === true) {
+              args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
+            } else {
+              args[0][0] = xmlDoc.documentElement.outerHTML;
+            }
+          }
+        }
+      }
+
+      return instantiate(_Blob, args); // arguments?
+    }
+
+    // Copy props and methods
+    let propNames = Object.getOwnPropertyNames(_Blob);
+    for (let i = 0; i < propNames.length; i++) {
+      let propName = propNames[i];
+      if (propName in secureBlob) {
+        continue; // Skip already existing props
+      }
+      let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
+      Object.defineProperty(secureBlob, propName, desc);
+    }
+
+    secureBlob.prototype = _Blob.prototype;
+    return secureBlob;
+  }(Blob);
+
+  // https://developer.chrome.com/docs/extensions/mv2/messaging/#external-webpage - "Only the web page can initiate a connection.", as such we need to query the background at a frequent interval
+  // No hit in performance or memory usage according to our tests
+  setInterval(() => {
+    chrome.runtime.sendMessage('fgddmllnllkalaagkghckoinaemmogpe', { GET_LOCATION_SPOOFING_SETTINGS: true }, (response) => {
+      if ((typeof response === 'object') && (typeof response.coords === 'object')) {
+        hookedObj.genLat = response.coords.lat;
+        hookedObj.genLon = response.coords.lon;
+        hookedObj.fakeGeo = response.fakeIt;
+      }
+    });
+  }, 500);
+  //]]>
+}hookGeo();})()</script>
+	<meta content="text/html; charset=windows-1252" http-equiv="content-type" /><!-- Find and Replace all instances of 'Driver Identifer' with the Driver Identifier of your instrument driver. Remove this note once this is complete. --><!-- Replace all the instructions that appear within the <font color="red"> tags with information about your instrument driver.  Make sure to delete the <font color="red"> tags as you fill in each line. Remove this note once this is complete.-->
+	<title>Instrument Driver Readme</title>
+	<style type="text/css">dt { float: left; margin-right: 5px; }
+	</style>
 </head>
 <body>
-<h1><font color="red">&lt;Driver Identifier&gt;</font> Instrument Driver Readme</h1>
-<p>To rate this instrument driver, go to the driver download page on the <a href="http://www.ni.com/idnet">Instrument Driver Network</a>.</p>
-<h2>1. Overview</h2>
-<dl>
-<dt>Instrument Driver Technology:</dt> <dd>LabVIEW Plug and Play (project-style)</dd>
-<dt>Manufacturer:</dt><dd><font color="Red">The manufacturer of the instrument. Example: Agilent</font></dd>
-<dt>Supported Language(s):</dt><dd><font color="Red">The supported programming environments. Example: LabVIEW</font></dd>
-<dt>Supported Model(s):</dt><dd><font color="Red">The instrument models supported by this driver. Example: 33120A, 33220A, 33250A</font></dd>
-<dt>Model(s) Tested:</dt><dd><font color="Red">The instrument models tested with this driver. Example: 33120A, 33220A</font></dd>
-<dt>Interface(s):</dt><dd><font color="Red">The supported communication interfaces. Example: GPIB, Serial, USB, Ethernet, etc.</font></dd>
-<dt>Firmware Revision(s) Tested:</dt><dd><font color="Red">The firmware revisions tested with this driver. Example: 8-5-12, A.01, etc.</font></dd>
-</dl>
-<dl>
-<dt>Certified:</dt><dd><font color="Red">Yes/No</font></dd>
-<dt>NI Supported:</dt><dd><font color="Red">Yes/No</font></dd>
-<dt>Source Code Available:</dt><dd><font color="Red">Yes/No</font></dd>
-</dl>
-<dl>
-<dt>Driver Revision:</dt><dd><font color="Red">The driver revision indicated here should match the driver version in the driver library properties. Example: 1.0</font></dd>
-<dt>Original Release Date:</dt><dd><font color="Red">mm/dd/yyyy</font></dd>
-<dt>Current Revision Date:</dt><dd><font color="Red">mm/dd/yyyy</font></dd>
-</dl>
-<h2>2. Required Software</h2>
-<p>Some software components need to be installed before using this
-instrument driver. The minimum versions of these components are listed
-below, and can be downloaded from the Download Site.</p>
-<p><font color="Red">The support software required by the driver. Example: VISA 3.0 or later</font></p>
-<p> For LabVIEW 8.2 and LabVIEW 2009
-Refer to the <i>LabVIEW Help</i> for more information about software requirements. You access the <i>LabVIEW Help</i> by selecting <i>Help»Search the LabVIEW Help</i>.</p>
-<p> For LabVIEW 2010 or later
-Refer to the <i>LabVIEW Help</i> for more information about software requirements. You access the <i>LabVIEW Help</i> by selecting <i>Help»LabVIEW Help</i>.</p>
-<h2>3. Known Issues</h2>
-<p>To report issues or provide feedback about this instrument driver,
-please send an email to <a href="mailto:instrument.drivers@ni.com">instrument.drivers@ni.com</a>.</p>
-<p><font color="Red">Include instrument functionality not supported by the driver or known issues as necessary.</font></p>
-<h2>4. Revision History</h2>
-<p>The latest version of this and other LabVIEW and LabWindows/CVI
-instrument drivers can be downloaded at the <a href="http://www.ni.com/idnet">Instrument Driver Network</a>.</p>
-<p><font color="Red">Provide detailed driver revision history including 
-driver revision number, date of revision, and description of revision 
-made to driver. Example:</font><br>
-<font color="Red">REV 1.0, 12/18/05</font><br>
-<font color="Red">Modified by: John Doe, Austin,TX.</font><br>
-<font color="Red">Original release.</font></p>
+<h1>HandsOnPi2040 Instrument Driver Readme</h1>
 
-</body></html>
+<h2>1. Overview</h2>
+
+<dl>
+	<dt>Instrument Driver Technology:</dt>
+	<dd>LabVIEW Plug and Play (project-style)</dd>
+	<dt>Manufacturer:</dt>
+	<dd>Community Training Initiative</dd>
+	<dt>Supported Language(s):</dt>
+	<dd>LabVIEW</dd>
+	<dt>Supported Model(s):</dt>
+	<dd>Raspberry Pi 2040 with VISA firmware loaded</dd>
+	<dt>Model(s) Tested:</dt>
+	<dd>Pico H and Pico W, Emulator</dd>
+	<dt>Interface(s):</dt>
+	<dd>USB UART, Ethernet</dd>
+	<dt>Firmware Revision(s) Tested:</dt>
+	<dd>cti_visa_rp2040_pi_pico_0.2.3.uf2</dd>
+</dl>
+
+<dl>
+	<dt>Certified:</dt>
+	<dd>No</dd>
+	<dt>NI Supported:</dt>
+	<dd>No</dd>
+	<dt>Source Code Available:</dt>
+	<dd>Yes</dd>
+</dl>
+
+<dl>
+	<dt>Driver Revision:</dt>
+	<dd>0.1.0</dd>
+	<dt>Original Release Date:</dt>
+	<dd>26 Oct 2023</dd>
+	<dt>Current Revision Date:</dt>
+	<dd>26 Oct 2023</dd>
+</dl>
+
+<h2>2. Required Software</h2>
+
+<p>Some software components need to be installed before using this instrument driver. The minimum versions of these components are listed below, and can be downloaded from the Download Site.</p>
+
+<p>LabVIEW 2022 or later, VISA 3.0 or later</p>
+
+<p>For LabVIEW 8.2 and LabVIEW 2009 Refer to the <i>LabVIEW Help</i> for more information about software requirements. You access the <i>LabVIEW Help</i> by selecting <i>Help&raquo;Search the LabVIEW Help</i>.</p>
+
+<p>For LabVIEW 2010 or later Refer to the <i>LabVIEW Help</i> for more information about software requirements. You access the <i>LabVIEW Help</i> by selecting <i>Help&raquo;LabVIEW Help</i>.</p>
+
+<h2>3. Known Issues</h2>
+
+<p>To report issues or provide feedback about this instrument driver, please send an email to <a href="https://github.com/LabVIEWCommunityTraining">https://github.com/LabVIEWCommunityTraining</a>.</p>
+
+<h2>4. Revision History</h2>
+
+<p>REV 0.1.0, 26 Oct 2023<br />
+Modified by: Steve Watts<br />
+Prototype</p>
+</body>
+</html>
