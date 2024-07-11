@@ -1,4 +1,9 @@
+# Ignore Project files, LabVIEW recreates these files every time it opens a project, no need to keep them in Git
+*.lvlps
+*.aliases
 
+#Ignore ~ files created by Open Office that are not needed in Git
 1) Course Manuals/.~lock.Course Manual 1.odt\#
 
+#Do not ignore the Emulator exe and keep it in Git
 !3) LabVIEW Instrument Emulator\builds\HandsOn\CTIPicoVISAEmulatorCTIPicoVISAEmulator.exe
