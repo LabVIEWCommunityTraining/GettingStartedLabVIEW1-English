@@ -1,13 +1,12 @@
 # GettingStartedLabVIEW1-English
-Getting Started with LabVIEW 3 hour Session Raspberry Pi Pico HW English
+Getting Started with LabVIEW 3-hour Session Raspberry Pi Pico HW English
 
-This will repo will contain 
-1) The course manuals in Open Document Format (use LibreOffice)
-2) Tutor instructions in Open Document Format 
-3) The LabVIEW Instrument emulator
-4) The LabVIEW Drivers
-5) Examples
-6) Solutions
-7) Firmware file
+This repo contains the software needed for teaching the classes
+* The LabVIEW Instrument Emulator
+* The LabVIEW Drivers
+* Examples
+* Solutions
+
+The documentation on how to set up the system to teach a CTI course and the course manuals are hosted at the CTI-documentation repository and are rendered via https://labviewcommunitytraining.github.io/cti-documentation/en/cti-doc/index.html
 
 This material is free under the MIT license, if you improve the material do the community a solid and update the repo.
