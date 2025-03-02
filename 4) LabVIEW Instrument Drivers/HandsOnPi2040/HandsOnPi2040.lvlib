@@ -33,9 +33,7 @@
 			<Item Name="Revision Query.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/Utility/Revision Query.vi"/>
 			<Item Name="Self-Test.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/Utility/Self-Test.vi"/>
 		</Item>
-		<Item Name="Examples" Type="Folder">
-			<Item Name="PicoHandsOnExample.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/PicoHandsOnExample.vi"/>
-		</Item>
+		<Item Name="Examples" Type="Folder"/>
 		<Item Name="Controls" Type="Folder">
 			<Item Name="AnaIns.ctl" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/AnaIns.ctl"/>
 			<Item Name="DigIns.ctl" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Public/DigIns.ctl"/>

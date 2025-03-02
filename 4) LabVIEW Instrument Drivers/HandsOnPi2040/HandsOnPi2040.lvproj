@@ -9,6 +9,9 @@
 		<Item Name="cti-drivers-lv-visa-main" Type="Folder" URL="/&lt;instrlib&gt;/HandsOnPi2040/cti-drivers-lv-visa-main">
 			<Property Name="NI.DISK" Type="Bool">true</Property>
 		</Item>
+		<Item Name="Examples" Type="Folder">
+			<Item Name="PicoHandsOnExample.vi" Type="VI" URL="/&lt;instrlib&gt;/HandsOnPi2040/Examples/PicoHandsOnExample.vi"/>
+		</Item>
 		<Item Name="HandsOnPi2040.lvlib" Type="Library" URL="/&lt;instrlib&gt;/HandsOnPi2040/HandsOnPi2040.lvlib"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
