@@ -1,3 +1,16 @@
+# IMPORTANT
+
+This project is archived (read-only).
+
+The content is now hosted here --> https://github.com/LabVIEWCommunityTraining/cti-documentation/tree/v2.0/course-material
+
+See https://discord.com/channels/1118836321021067305/1366809907999019058 for more information about why we archived this project.
+
+
+
+
+
+
 # GettingStartedLabVIEW1-English
 Getting Started with LabVIEW 3-hour Session Raspberry Pi Pico HW English
 
